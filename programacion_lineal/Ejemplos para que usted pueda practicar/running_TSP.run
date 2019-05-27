@@ -1,0 +1,7 @@
+reset;
+option solver cplex;
+model lab5tsp_aless.mod;
+data lab5tsp_aless.dat;
+solve;
+display x;
+display u;

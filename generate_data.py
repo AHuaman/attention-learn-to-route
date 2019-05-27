@@ -3,6 +3,9 @@ import os
 import numpy as np
 from utils.data_utils import check_extension, save_dataset
 
+# Librerías extras:
+from sklearn.datasets.samples_generator import make_blobs # generar puntos clusterizados
+
 
 def generate_tsp_data(dataset_size, tsp_size):
     return np.random.uniform(size=(dataset_size, tsp_size, 2)).tolist()
@@ -21,7 +24,6 @@ def generate_vrp_data(dataset_size, vrp_size):
         np.random.randint(1, 10, size=(dataset_size, vrp_size)).tolist(),  # Demand, uniform integer 1 ... 9
         np.full(dataset_size, CAPACITIES[vrp_size]).tolist()  # Capacity, same for whole dataset
     ))
-
 
 def generate_op_data(dataset_size, op_size, prize_type='const'):
     depot = np.random.uniform(size=(dataset_size, 2))
