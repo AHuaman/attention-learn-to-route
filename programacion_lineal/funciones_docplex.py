@@ -382,7 +382,9 @@ def Crear_M_TSPOptimizarObtenerViajesPlotearGrafo(dataframe_distancias, etiqueta
     return modelo_m_tsp, viajes_modelo, grafo_viajes
 
 def CrearCVRPOptimizarObtenerViajesPlotearGrafo(dataframe_distancias, etiquetas_nodos, str_nombre_depot, num_rutas,
-                                                capacidad_vehiculo, serie_demandas_nodos, str_nombre_modelo, limite_mins=9999999):
+                                                capacidad_vehiculo, serie_demandas_nodos, str_nombre_modelo, limite_mins=9999999,
+                                                limite_porc_optim = None,
+                                                url=None, key=None, log_output=True):
     """
     Realiza el procesamiento completo! Nótese que 'num_rutas' es igual a la cantidad de vehículos que se cuenta.
     """
@@ -394,10 +396,16 @@ def CrearCVRPOptimizarObtenerViajesPlotearGrafo(dataframe_distancias, etiquetas_
                               capacidad_vehiculo=capacidad_vehiculo,
                               serie_demandas_nodos=serie_demandas_nodos,
                               str_nombre_modelo=str_nombre_modelo)
+    # Seteamos el limite de ser necesario
     modelo_cvrp.parameters.timelimit = limite_mins*60 # tiempo máximo de resolución en segundos
+    if limite_porc_optim is not None:
+        modelo_cvrp.parameters.mip.tolerances.mipgap = limite_porc_optim
     
     print("======================= OPTIMIZANDO MODELO =======================")
-    modelo_cvrp.solve(log_output=True)
+    if url is None:
+        modelo_cvrp.solve(log_output=log_output)
+    else:
+        modelo_cvrp.solve(log_output=log_output, url=url, key=key)
     
     print("============================ SOLUCIÓN ============================")
     modelo_cvrp.print_solution()
